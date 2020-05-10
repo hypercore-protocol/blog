@@ -3,6 +3,7 @@
   --darkred: #7F0036;
   --lightgray: #e0e0e0;
   --gray: #C0C0C0;
+  --mediumgray: #888;
   --darkgray: #333;
   --navy: #17050F;
   --blue: #082840;
@@ -15,9 +16,14 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: system-ui, sans-serif;
   color: var(--darkgray);
   background-color: var(--white);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-family: 'ibm_plex_sansregular';
+  line-height: 23px;
+  font-size: 16px;
 }
 p:last-child {
   margin-bottom: 0;
@@ -25,7 +31,7 @@ p:last-child {
 p,
 .tmpl-post li,
 img {
-  max-width: 37.5em; /* 600px /16 */
+  max-width: 37.5em;
 }
 p,
 .tmpl-post li {
@@ -40,10 +46,13 @@ a[href]:visited {
 main {
   padding: 1rem;
 }
-main :first-child {
-  margin-top: 0;
-}
 header {
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   border-bottom: 1px dashed var(--lightgray);
 }
 header:after {
@@ -116,7 +125,9 @@ pre {
 
 /* Header */
 .home {
-  padding: 0 1rem;
+  flex: 1;
+  align-self: center;
+  padding: 0 1rem 0 2rem;
   float: left;
   margin: 1rem 0; /* 16px /16 */
   font-size: 1em; /* 16px /16 */
@@ -125,23 +136,25 @@ pre {
   text-decoration: none;
 }
 
-/* Nav */
-.nav {
+.logo {
+  width: 60px;
+}
+
+/* Social */
+.social {
   padding: 0;
   list-style: none;
   float: left;
   margin-left: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  width: 200px;
 }
-.nav-item {
-  display: inline-block;
-  margin-right: 1em;
-}
-.nav-item a[href]:not(:hover) {
-  text-decoration: none;
-}
-.nav-item-active {
-  font-weight: 700;
-  text-decoration: underline;
+.social-icon {
+  display: inline;
+  margin-right: 0.5em;
+
 }
 
 /* Posts list */
@@ -223,4 +236,40 @@ a[href].direct-link:focus:visited,
 :hover > a[href].direct-link,
 :hover > a[href].direct-link:visited {
   color: #aaa;
+}
+
+/* Hypercore Protocol additions */
+.wrapper {
+  max-width: 90vw;
+}
+.post-body h4 {
+  color: var(--mediumgray);
+  margin: .1em;
+}
+.post-body h1 {
+  margin-bottom: .3em;
+}
+
+@media screen and (max-width: 600px) {
+  .wrapper {
+    width: 70vw;
+  }
+  .post-wrapper {
+    display: flex;
+    flex-direction: column
+  }
+}
+
+@media screen and (min-width: 601px) {
+  .post-wrapper {
+    display: flex;
+    flex-direction: row
+  }
+  .post-toc {
+    padding-top: 6em;
+    padding-right: 2em;
+  }
+  .post-body {
+    max-width: 50vw;
+  }
 }

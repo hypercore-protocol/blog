@@ -1,0 +1,302 @@
+---
+title: Announcing Hyperdrive v10
+description: Hyperdrive is now faster and more reliable. Plus it comes with a daemon.
+date: 2020-05-13
+author: Andrew Osheroff
+author_page: https://twitter.com/andrewosh
+tags:
+  - hyperdrive
+  - release
+layout: layouts/post.njk
+---
+For the past year, we've been working hard on the v10 release of Hyperdrive. After a long period of beta testing, we're excited to announce that it's now ready for general use!
+
+Hyperdrive v9, along with many other modules prefixed by 'hyper', has served as the backbone for [Dat](https://dat.foundation) for many years -- you might already be familiar with Hyperdrive if you've dug into Dat's internals. Leading up to this release, we've done a bit of restructuring: Hyperdrive and its many hyper-siblings now live under a small, technically-focused brand/organization called the [Hypercore Protocol](...).
+
+For more info about the change, check out [this post](...). Practically, this change means very little beyond branding, but we're hoping it will give the modules a chance to shine on their own. In light of that, here's a look inside Hyperdrive.
+
+In this post we'll step through some of the improvements we've made in v10, explain how Hyperdrive fits into the broader Hypercore Protocol ecosystem, and show you how to get started using it. This release is only the beginning, and we describe our next steps in the ["Looking Forward"](#looking-forward) section.
+
+It's been a while since we've given an update, so we've a lot to say. If you just want to jump right in, skip to the ["Getting Started"](#getting-started) section.
+
+And for those too busy to read a long post, here's a quick TL;DR of what's new:
+1. __Improved Indexing__: We're using a new [HAMT](https://en.wikipedia.org/wiki/Hash_array_mapped_trie)-based indexing structure called a [Hypertrie](...), which gives huge perf/scaling boosts all around.
+2. __Mounts__: You can now "link" other peoples' Hyperdrives into your own. It's not a complete multiwriter solution, but it goes a long way.
+3. __Hyperdrive Daemon__: We've created a cross-platform daemon that provides both FUSE and gRPC access to daemon-managed drives.
+4. __Better Foundations__: We've recently introduced the [Hyperswarm](...) DHT, and improvements to the [Hypercore protocol](...), which have helped make our whole stack snappier and more reliable.
+
+## Intro
+
+(Feel free to skip this bit if you're already familiar with Hyperdrive)
+
+Hyperdrive is a POSIX filesystem implementation, written in NodeJS, that's designed to be the storage layer for fast, scalable, and secure peer-to-peer applications. For most developers, working with a Hyperdrive should feel just like using Node's standard `fs` module, with only minor additions. Our main goal has always been to make it possible to share entire filesystems with others using a single 32-byte key (i.e. `hyper://ab13d...`). We'll refer to Hyperdrive filesystems as "drives" from here on out.
+
+Drives are great for applications in which a single writer wants to distribute large, mutable collections of files to many readers. A file collection might be a video library, a personal blog, a scientific dataset, or what have you. Like BitTorrent, peers can download files from other peers without sacrificing trust (drive contents are signed by the original author).
+
+Unlike BitTorrent, files can be added or modified after a drive is created, and peers can "watch" a drive for updates, meaning update notifications are dispatched to readers in __realtime__!
+
+__(Realtime gif here)__
+
+Importantly, drives support efficient random-access file reads, meaning that you can seek through a video and it will download only the portions of the video you're viewing, on-demand. We call this property "sparse downloading", and it's great for things like large websites (think all of Wikipedia mirrored to a drive) where readers only view single pages at a time.
+
+__(Wikipedia gif here)__
+
+Under the hood, Hyperdrive is built using two append-only log data structures called [Hypercores](https://github.com/mafintosh/hypercore), one for file metadata and one for file contents. To keep things short, we won't dive into Hypercore internals here, but be sure to check out the [Hypercore v8 blog post](...) for details. The Hypercore Protocol gives us a fast and secure foundation for exchanging ordered blocks of data, but little beyond that. A good filesystem depends a good index.
+
+__(Maf's append-only log picture or video here)__
+
+To support performant filesystem operations, such as directory traversals, we've layered a indexing data structure on top of Hypercore called a Hypertrie, which is an append-only implementation of a [hashed array-mapped trie](...). Painting a complete picture of Hypertrie is a blog post in itself, but the most important takeaway is that it lets us locate file/directory metadata, which is potentially scattered across many peers, using `O(log_4(n))` network requests, worst case. In practice, we use a specialized Hypercore extension to make this dramatically faster (`O(1)` in most cases).
+
+## Better Performance and Reliability
+
+The Hypercore Protocol ecosystem has seen major improvements recently, and Hyperdrive directly benefits from all of them. Most significant, Hyperdrive v10 leverages [Hypertrie](https://github.com/mafintosh/hypertrie) for __better indexing__, and [Hyperswarm](https://github.com/hyperswarm/hyperswarm) for __better networking__.
+
+### Networking
+
+Hyperswarm is a Kademlia-backed DHT implementation that's designed specifically for the home. It uses a distributed approach to holepunching, whereby peers in the DHT can help bootstrap connections to other peers, that works for the vast majority of home routers.
+
+Hyperswarm also comes full of heuristics designed to work around offline nodes and keep routing tables healthy. When combined with the holepunching, the heuristics make it dramatically faster to both discover and connect to peers.
+
+__(Maf's hyperswarm picture here)__
+
+### Indexing
+
+Hyperdrive v9 used an indexing data structure that, while great for small drives, quickly broke down as drives or directories grew large. In v10 we're using [Hypertrie](https://github.com/mafintosh/hypertrie). It scales nicely -- as a demo, we put a complete Wikipedia mirror (tens of millions of files, split across a few directories) into a drive, and we saw minimal performance degradation when compared with small drives.
+
+__(Maf's hypertrie picture here)__
+
+Hypertrie will be described more in a follow-up post, but for now the main takeaway is that your directories can be as large as you (realistically) like, and file lookups will remain snappy!
+
+## What's New?
+
+As for what's new, for this release we've focused on features that improve usability, simplify drive management, and reduce the friction of sharing. The two largest things we'd like to introduce are __mounts__, which let you  create nested Hyperdrives, and the __Hyperdrive daemon__, for serving as a one-stop shop for managing collections of drives.
+
+### Hyperdrive Mounts
+
+Hypercore gives Hyperdrive many of its nice features, such as sparse downloading, for "free" -- the bulk of the work is handled at that layer. Hypercore, however, is fundamentally a single-writer data structure. A core's writer maintains a private key which is used to sign all appended data, making it possible for readers to exchange data amongst themselves without fear of tampering. Only letting one person (on one machine!) make changes to a drive is a big limitation, though! Not surprisingly, support for multiple writers has long been one of our most-requested features.
+
+In v10, we don't go all the way to a general multi-writer solution; solving multi-writer scalably, without introducing major performance penalties or introducing confusing UX, remains a research question for us. That said, v10 introduces mounts, which are pretty much "links" to other Hyperdrives that look and act like normal directories.
+
+__(Maf's mount picture here)__
+
+Mounts open up lots of opportunities, both for more granular sharing and for fun multi-user applications. On the sharing side, you might create a `projects/` directory which contains mounts like `projects/my-module`, `projects/my-website` -- one drive for each thing you're working on. With mounts, you can share `my-website` on its own, without giving away access to everything in `projects/`. This pattern is especially handy in the daemon, which we'll talk about next.
+
+Things get more interesting when the drives you're mounting aren't your own.  We've had a lot of success with a "groups" pattern, wherein a "group owner" creates a top level group drive, and subsequently mounts "user profiles" within the group:
+```
+/my-group  // Owned by the group owner (say User A)
+  /user-a  // Owned by User A
+  /user-b  // Owned by User B
+  ...
+```
+Using this pattern, you can write simple "groupware" that aggregates content across users, using little more than a recursive `readdir` on the group drive. For example, to find all blog posts in the group, you might search for all Markdown files in each user's `blog/` directory.
+
+__(Groupware gif here??)__
+
+#### Interested in using mounts now?
+
+If you're using Hyperdrive directly, the `drive.mount(path, key, [opts])` method is what you're after. It works as you'd expect from the args (mount `key` at `path`), and the options can include a static drive version.
+
+It's also easy to create mounts through the CLI, using the Daemon, which we'll describe next.
+
+## The Hyperdrive Daemon
+
+Hyperdrive is built with modular storage and networking in mind -- you can store drive contents however you like, and you can replicate them over any NodeJS stream. This flexibility has benefits, but it generally makes it harder to get started. To that end, we've created a cross-platform daemon that handles storage/networking for you, while giving you a variety of ways to access daemon-managed drives.
+
+A long-running service that manages your drives leads to better availability for the drives you're seeding. It's also great for DHT health: with a long-running background service, the Hyperswarm DHT node on your computer is stable, meaning the DHT's routing table contains fewer offline nodes. This translates to faster key lookups, meaning faster loading times.
+
+Most importantly, the daemon serves as a central point for exposing drives to external services -- currently we support a [gRPC](https://grpc.io/) API, with a corresponding [NodeJS client library](https://github.com/andrewosh/hyperdrive-daemon-client), and a FUSE interface.
+
+[FUSE](https://github.com/libfuse/libfuse) allows us to emulate a native filesystem directory from within our NodeJS code. It lets us turn Hyperdrives into normal directories on your computer! This means that whenever the daemon is running, you'll be able to access drives directly from within the OSX Finder, say, inside the `~/Hyperdrive` directory.
+
+With FUSE, drives are instantly accessible to other programs. You can watch movies using VLC, load PDFs using your favorite reader program, and use Unix utilities like `find` and `ls` to explore drives. Take a look at the "Getting Started" section below for more depth about this.
+
+__(PDF loading from Finder gif here)__
+
+The `hyperdrive` CLI tool contains a handful of commands both for interacting with FUSE, and for displaying information about drives. It also provides `import` and `export` commands, for those users who don't want to mess around with `~/Hyperdrive`.
+
+__(CLI screenshot here)__
+
+While the `~/Hyperdrive` directory was added to simplify end-user UX, the gRPC API exists for developers -- you can now program with Hyperdrive in any language, without needing to deal with networking yourself. If you're using NodeJS, the client library gives you a `RemoteHyperdrive` interface that feels exactly like a normal drive. To get started, jump [here](#With-the-Client-Library).
+
+We're hoping that the daemon provides a frictionless entry point both for end-users looking to share data, and for developers who want to build apps and services using Hyperdrive. If you have thoughts or feedback on the UX, don't hesitate to drop into our chat and voice them!
+
+## Getting Started
+
+The best way to jump into the Hyperdrive stack is to install the daemon. This can be done through NPM:
+```
+npm install hyperdrive-daemon -g
+```
+Once the daemon's installed, you'll have access to the `hyperdrive` CLI command. From here, you have a few options. It's best to consult the [daemon's README](https://github.com/andrewosh/hyperdrive-daemon) for a more detailed guide, but we'll highlight the key steps here.
+
+### With FUSE
+
+*Note: FUSE is currently only available on Linux and OSX. The CLI's `import` and `export` commands can be used to move data in/out of drives on Windows.*
+
+Immediately after installation, you'll need to do a one-time setup step, which will request `sudo` access -- don't worry, the daemon itself does not run as root. This is necessary in order to configure the bundled FUSE kernel modules:
+```
+hyperdrive fuse-setup
+```
+
+After this, start the daemon normally and you'll notice that your `~/Hyperdrive` directory exist and contains a subdirectory called `Network`. If you see `Network`, you're good to go.
+
+__(FUSE from CLI video clip here)__
+
+As described in the walkthrough in the daemon README, `~/Hyperdrive` is your "root drive," which you can think of as a replacement for your Home directory. You can create subdirectories like Documents, Videos, or Projects in it, as you like.
+
+The `Network` directory is a "magic directory" in that it does not actually exist inside of your root drive. It's there to make it easy to:
+1. Get storage/networking statistics as json files in `Network/Stats`
+2. See what drives you're announcing on the DHT in `Network/Active`
+3. Access any drive in the world by key at `Network/<drive-key>`
+
+Details about `Network`, along with explanations of all the CLI commands you can use to populate and explore your root drive, can be found in the [README](https://github.com/andrewosh/hyperdrive-daemon#usage)
+
+### With the Client Library
+
+If you have a daemon instance running, you can use the [`hyperdrive-daemon-client`](https://github.com/andrewosh/hyperdrive-daemon-client) module to create `RemoteHyperdrive` objects. Under the hood, these will send commands using gRPC to daemon-managed drives.
+
+The `RemoteHyperdrive` API mirrors Hyperdrive's. The following code snippet will create a client instance, use that client to create a new drive, then write a file to the drive:
+```javascript
+const { HyperdriveClient } = require('hyperdrive-daemon-client')
+
+// Assuming the following is done in an async function
+const client = new HyperdriveClient() // Will auto-connect to the daemon
+await client.ready()
+
+const drive = await client.drive.get() // Creates a new drive
+await drive.writeFile('foo.txt', 'bar')
+```
+
+The daemon README gives more examples. As of now, we only have a NodeJS client, but the daemon's [gRPC schemas](https://github.com/andrewosh/hyperdrive-schemas/tree/master/schemas/daemon) are available, and we'd welcome any efforts to create clients in other languages.
+
+### With Beaker
+The [Beaker Browser](https://beakerbrowser.com) makes heavy use of Hyperdrive internally. Beaker 1.0 Beta, which is being released *tomorrow*, actually installs and manages the daemon for you in the background! Beaker comes packed with authoring tools that make it easy to make P2P websites and share them with others.
+
+The [Beaker developer portal](https://beaker.dev) contains thorough docs and tutorials (Tip: open that site in Beaker to make the tutorials interactive!), so you'll be off the ground immediately, creating and sharing Hyperdrives containing fully-featured web applications (think personal wikis, photo albums, blog aggregators, and more).
+
+__(Beaker overview screenshot here?)__
+
+### Standalone
+You'll probably want to use the remote interface hyperdrive-daemon most of the time, but in case you don't want to use the daemon - perhaps in a one-off script or some kind of embedded scenario - you can use Hyperdrive as a module inside your program. The [README](https://github.com/mafintosh/hyperdrive) shows you how, and it's also where you'll find complete API docs.
+
+As a simple example, the following code will create a fresh Hyperdrive that stores its content on-disk at `./storage`:
+```javascript
+const hyperdrive = require('hyperdrive')
+const drive = hyperdrive('./storage')
+drive.writeFile('foo.txt', 'bar', console.log)
+```
+
+The `drive.replicate` method returns a Duplex stream that can be piped into any networking module you like (in the daemon, we use [Hyperswarm](https://github.com/hyperswarm/hyperswarm)). Two replication streams, when piped together, will sync the drive's contents.
+
+Here's a quick example of how you can use Hyperswarm to discover and sync contents from other peers using a drive. For brevity's sake (this post is long enough!) we won't go into the details, but hopefully this end-to-end example highlights the simplicity of it all:
+
+*Note: To keep this even smaller, we're using a small helper module called the [hyperswarm replicator](https://github.com/hyperswarm/replicator), which wraps a few Hyperswarm setup details.*
+
+__(Use Paul's side-by-side code tabs thing here)__
+
+Code running on the drive creator's side:
+```javascript
+const hyperdrive = require('hyperdrive')
+const replicate = require('@hyperswarm/replicator')
+
+const driveToShare = hyperdrive('./writer-storage')
+driveToShare.writeFile('hello.txt', 'world', err => {
+  if (err) return console.error(err)
+
+  const swarm = replicate(driveToShare)
+  process.on('SIGINT', () => swarm.destroy())
+
+  // Let's say the drive's key is 1df13252...
+  console.log('Seeding drive:', driveToShare.key.toString('hex'))
+})
+```
+
+Code running on the reader's side:
+```javascript
+const hyperdrive = require('hyperdrive')
+const replicate = require('@hyperswarm/replicator')
+
+// Assuming this is the key generated above.
+const key = Buffer.from('1df13252...', 'hex')
+const driveToRead = hyperdrive('./reader-storage', key)
+
+const swarm = replicate(driveToRead)
+process.on('SIGINT', () => swarm.destroy())
+
+driveToRead.on('peer-add', () => {
+  driveToRead.readFile('hello.txt', { encoding: 'utf8' }, (err, contents) => {
+    if (err) return console.error(err)
+    console.log('Got contents:', contents)
+  })
+})
+```
+
+In the future, we plan on making a few detailed tutorials about programmatic Hyperdrive usage. Remember, if you're looking for the simplest solution, check out the daemon and/or Beaker!
+
+## Looking Forward
+
+As you can see, a lot's been happening lately! But far more remains to be done. With these features released, here's a sketch of what we plan on tackling next.
+
+### More Indexing Improvements
+
+The current implementation of Hypertrie's led to major gains. That said, it lacks a few features you might expect from a filesystem, most importantly atomic renames. Also, due to the way trie iteration works, both symlinks and mounts are slightly less efficient than they need to be.
+
+We've been sitting on a new, heavily-fuzzed trie implementation for a while now, but we haven't had the cycles to integrate it yet. It supports symlinks (directly, as opposed to in the Hyperdrive layer), mounts, and atomic renames through a unified iterator abstraction that we're calling a "trie controller". It's better all around.
+
+And don't worry, the new trie will be fully backwards-compat with the one we're releasing now.
+
+### Deduplication
+
+The daemon affords us a bunch of cool opportunities by virtue of its storing all drives in a single place on-disk, and handling networking in one place. By having total control of storage/networking, we can perform optimizations across your entire drive collection.
+
+On the networking side, we're investigating methods for deduplicating block requests that have already been satisfied by other drives. This is a bit confusing, but it boils down to "you should never have to download the same data twice, even if its contained in different drives".
+
+On the storage side, we're considering supporting content-addressed block storage, meaning if you have two similar drives, only the set of unique blocks will be persisted on disk -- common blocks will only be stored once.
+
+### Random-Access Writes
+
+While a writer can update their drives however they like (i.e. adding new files, deleting files, appending to files, etc.), certain operations are more efficient than others. Unfortunately, editing existing files is one of the inefficient ones -- it currently results in file duplication. This is bad news if you want to run a database or append to log files.
+
+There are two ways to remedy this:
+1. Better garbage collection, where old versions of files can be cleared from disk easily (fine for simple cases, but still bad for databases).
+2. Efficient file updates, where writing to an existing file does not lead to data copying.
+
+We're exploring various approaches based on [inodes](https://en.wikipedia.org/wiki/Inode) for (2). As with general multiwriter, there's a tricky balancing act involved. More sophisticated indexing that supports these updates will unavoidably increase read latencies in files without random-access modifications. This won't cut it if you're watching a large movie, never modified after it was first written, from start to end.
+
+We'll surely have to use a hybrid approach, and we're still actively researching this.
+
+### Garbage Collection
+
+As described above, the append-only nature of file updates means that we're not exactly being conservative with your disk space. Hyperdrive does not currently support clearing old file versions, but we've taken a step in that direction with "tags."
+
+Using tags, you can assign names to drive versions you'd like to keep around. We'll shortly be adding support for a `clearUntagged` method that will remove untagged file versions from disk.
+
+With `clearUntagged`, random-access writes become less essential, so we're hoping it will serve as a nice near-term stopgap.
+
+### Union Mounts
+
+Mounts currently cannot overlap with one another. While it's still possible to build great multi-user applications today (using the group model), there are many cases where you'd like to display a "merged view" over many drives.
+
+To that end we're thinking about ways to extend mounts. A simple union mounts feature, without any opinionated conflict resolution (i.e. displaying conflicting files side-by-side), is a natural next step.
+
+Of course, general multiwriter, with customizable hooks for conflict resolution, remains on our to-do list, but that's still a far-future feature. We want to see how far we can go with mounts first. The "trie controller" design we mentioned above makes it easier to explore this.
+
+## Many Thanks
+
+Gearing up for this release has been a big group effort over the past year, and we owe a lot to the many contributors in the Dat community who have helped test alpha versions of the stack, fix bugs, and review docs.
+
+A very special thanks goes to Samsung, whose generous [Samsung Next](https://samsungnext.com/) grant funded a massive chunk of this work. Huge thanks to Ricardo and the rest of the Samsung Next team!
+
+## Learning More
+To learn more about how Hyperdrive works under the hood, your best bet is to check out the source code on GitHub. Our code's currently split across a number of repos, all within the [Hypercore Protocol](...) organization. Here are a few direct links to the stuff we've discussed in this post:
+* [Hyperdrive](...)
+* [Hyperdrive Daemon](...)
+* [Hypertrie](...)
+* [Hypercore](...)
+* [Hyperswarm](...)
+
+## Chat with us
+If you have questions about Hyperdrive's design, or you run into bugs, shoot us a message in [GitHub Discussions](...) -- that's where we'll be having more focused, development-oriented conversations.
+
+For higher-level chats about the Dat ecosystem and P2P more generally, chime in on the #dat channel on Freenode. We all hang out there too.
+
+And if you want to say something more privately, email us at [hello@hypercore-protocol.org](mailto:hello@hypercore-protocol.org).

@@ -2,8 +2,21 @@
 layout: layouts/base.njk
 templateClass: tmpl-post
 ---
-<h1>{{ title }}</h1>
 
-{{ content | safe }}
+<div class="post-wrapper">
+  <div class="post-toc">
+     {{ content | toc | safe }}
+  </div>
+  <div class="post-body">
+    <div class="post-header">
+      <h1>{{ title }}</h1>
+      <h4>By <a href="{{ author_page | url }}">{{ author }}</a> and the Hyperdrive team.</h4>
+      <h4>{{ date | htmlDateString }}<h4>
+    </div>
+    <article>
+      {{ content | safe }}
+    </article>
+  </div>
+</div>
 
 <p><a href="{{ '/' | url }}">← Home</a></p>

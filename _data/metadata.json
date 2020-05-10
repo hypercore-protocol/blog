@@ -1,15 +1,15 @@
 {
-  "title": "Your Blog Name",
-  "url": "https://myurl.com/",
-  "description": "I am writing about my experiences as a naval navel-gazer.",
+  "title": "The Hypercore Protocol Blog",
+  "url": "https://blog.hypercore-protocol.org/",
+  "description": "News and thoughts from the Hypercore Protocol team.",
   "feed": {
-    "subtitle": "I am writing about my experiences as a naval navel-gazer.",
+    "subtitle": "News and thoughts from the Hypercore Protocol team.",
     "filename": "feed.xml",
     "path": "/feed/feed.xml",
-    "id": "https://myurl.com/"
+    "id": "https://blog.hypercore-protocol.org/"
   },
   "author": {
-    "name": "Your Name Here",
-    "email": "youremailaddress@example.com"
+    "name": "Andrew Osheroff",
+    "email": "andrewosh@gmail.com"
   }
 }

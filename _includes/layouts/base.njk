@@ -6,36 +6,37 @@
     <title>{{ renderData.title or title or metadata.title }}</title>
     <meta name="Description" content="{{ renderData.description or description or metadata.description }}">
     <link rel="stylesheet" href="{{ '/css/index.css' | url }}">
-    <link rel="stylesheet" href="{{ '/css/prism-base16-monokai.dark.css' | url }}">
+    <link rel="stylesheet" href="{{ '/css/prism-atom-dark.css' | url }}">
+    <link rel="stylesheet" href="{{ '/css/font-awesome/css/fontawesome.css' | url }}">
+    <link rel="stylesheet" href="{{ '/css/font-awesome/css/brands.css' | url }}">
+    <link rel="stylesheet" href="{{ '/css/fonts/index.css' | url }}">
     <link rel="alternate" href="{{ metadata.feed.path | url }}" type="application/atom+xml" title="{{ metadata.title }}">
   </head>
   <body>
-    <header>
-      <h1 class="home"><a href="{{ '/' | url }}">{{ metadata.title }}</a></h1>
+    <div class="wrapper">
+      <header>
+        <a href="https://hypercore-protocol.org">
+          <img src="{{ '/img/hypercore-protocol.png' | url }}" class="logo"></img>
+        </a>
+        <h1 class="home"><a href="{{ '/' | url }}">{{ metadata.title }}</a></h1>
+        <ul class="social">
+          {% for icon in socialIcons %}
+            <li>
+              <a href="{{ icon.url }}">
+                <i class="{{ icon.classes }}" alt="{{ icon.alt }}"></i>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </header>
 
-      {#- Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/ #}
-      <ul class="nav">
-      {%- for entry in collections.all | eleventyNavigation %}
-        <li class="nav-item{% if entry.url == page.url %} nav-item-active{% endif %}"><a href="{{ entry.url | url }}">{{ entry.title }}</a></li>
-      {%- endfor %}
-      </ul>
-    </header>
+      <main{% if templateClass %} class="{{ templateClass }}"{% endif %}>
+        {{ content | safe }}
+      </main>
 
-    <main{% if templateClass %} class="{{ templateClass }}"{% endif %}>
-      <div class="warning">
-        <ol>
-          <li>Edit the <code>_data/metadata.json</code> with your blog’s information.</li>
-          <li>(Optional) Edit <code>.eleventy.js</code> with your <a href="https://www.11ty.dev/docs/config/">configuration preferences</a>.</li>
-          <li>Delete this message from <code>_includes/layouts/base.njk</code>.</li>
-        </ol>
-        <p><em>This is an <a href="https://www.11ty.io/">Eleventy project</a> created from the <a href="https://github.com/11ty/eleventy-base-blog"><code>eleventy-base-blog</code> repo</a>.</em></p>
-      </div>
+      <footer></footer>
 
-      {{ content | safe }}
-    </main>
-
-    <footer></footer>
-
-    <!-- Current page: {{ page.url | url }} -->
+      <!-- Current page: {{ page.url | url }} -->
+    </div>
   </body>
 </html>
