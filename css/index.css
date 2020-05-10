@@ -266,7 +266,7 @@ a[href].direct-link:focus:visited,
     flex-direction: row
   }
   .post-toc {
-    padding-top: 6em;
+    padding-top: 6.5em;
     padding-right: 2em;
   }
   .post-body {
