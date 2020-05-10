@@ -17,15 +17,13 @@ For more info about the change, check out [this post](...). Practically, this ch
 
 In this post we'll step through some of the improvements we've made in v10, explain how Hyperdrive fits into the broader Hypercore Protocol ecosystem, and show you how to get started using it. This release is only the beginning, and we describe our next steps in the ["Looking Forward"](#looking-forward) section.
 
-It's been a while since we've given an update, so we've a lot to say. If you just want to jump right in, skip to the ["Getting Started"](#getting-started) section.
-
-And for those too busy to read a long post, here's a quick TL;DR of what's new:
+Here's a quick TL;DR of what's new:
 1. __Improved Indexing__: We're using a new [HAMT](https://en.wikipedia.org/wiki/Hash_array_mapped_trie)-based indexing structure called a [Hypertrie](...), which gives huge perf/scaling boosts all around.
-2. __Mounts__: You can now "link" other peoples' Hyperdrives into your own. It's not a complete multiwriter solution, but it goes a long way.
+2. __Mounts__: You can now "link" other peoples' Hyperdrives into your own.
 3. __Hyperdrive Daemon__: We've created a cross-platform daemon that provides both FUSE and gRPC access to daemon-managed drives.
 4. __Better Foundations__: We've recently introduced the [Hyperswarm](...) DHT, and improvements to the [Hypercore protocol](...), which have helped make our whole stack snappier and more reliable.
 
-## Intro
+## What's Hyperdrive?
 
 (Feel free to skip this bit if you're already familiar with Hyperdrive)
 
@@ -41,7 +39,7 @@ Importantly, drives support efficient random-access file reads, meaning that you
 
 __(Wikipedia gif here)__
 
-Under the hood, Hyperdrive is built using two append-only log data structures called [Hypercores](https://github.com/mafintosh/hypercore), one for file metadata and one for file contents. To keep things short, we won't dive into Hypercore internals here, but be sure to check out the [Hypercore v8 blog post](...) for details. The Hypercore Protocol gives us a fast and secure foundation for exchanging ordered blocks of data, but little beyond that. A good filesystem depends a good index.
+Under the hood, Hyperdrive is built using two append-only log data structures called [Hypercores](https://github.com/mafintosh/hypercore), one for an efficient metadata index and one for binary file content. You can learn more about Hypercore from the [Hypercore Protocol website](https://hypercore-protocol.org). Hypercore gives us a fast and secure foundation for exchanging ordered blocks of data, but a good filesystem depends a good index.
 
 __(Maf's append-only log picture or video here)__
 
@@ -178,16 +176,7 @@ __(Beaker overview screenshot here?)__
 ### Standalone
 You'll probably want to use the remote interface hyperdrive-daemon most of the time, but in case you don't want to use the daemon - perhaps in a one-off script or some kind of embedded scenario - you can use Hyperdrive as a module inside your program. The [README](https://github.com/mafintosh/hyperdrive) shows you how, and it's also where you'll find complete API docs.
 
-As a simple example, the following code will create a fresh Hyperdrive that stores its content on-disk at `./storage`:
-```javascript
-const hyperdrive = require('hyperdrive')
-const drive = hyperdrive('./storage')
-drive.writeFile('foo.txt', 'bar', console.log)
-```
-
-The `drive.replicate` method returns a Duplex stream that can be piped into any networking module you like (in the daemon, we use [Hyperswarm](https://github.com/hyperswarm/hyperswarm)). Two replication streams, when piped together, will sync the drive's contents.
-
-Here's a quick example of how you can use Hyperswarm to discover and sync contents from other peers using a drive. For brevity's sake (this post is long enough!) we won't go into the details, but hopefully this end-to-end example highlights the simplicity of it all:
+Here's a quick example of how you can use Hyperswarm to discover and sync contents from other peers using a drive. For brevity's sake we won't go into the details, but hopefully this end-to-end example highlights the simplicity of it all:
 
 *Note: To keep this even smaller, we're using a small helper module called the [hyperswarm replicator](https://github.com/hyperswarm/replicator), which wraps a few Hyperswarm setup details.*
 

@@ -22,8 +22,8 @@ body {
   flex-direction: row;
   justify-content: center;
   font-family: 'ibm_plex_sansregular';
-  line-height: 23px;
-  font-size: 16px;
+  line-height: 1.5;
+  font-size: 1.3em;
 }
 p:last-child {
   margin-bottom: 0;
@@ -31,11 +31,11 @@ p:last-child {
 p,
 .tmpl-post li,
 img {
-  max-width: 37.5em;
+  max-width: 45em;
 }
 p,
 .tmpl-post li {
-  line-height: 1.45;
+  line-height: 1.6;
 }
 a[href] {
   color: var(--blue);
@@ -252,7 +252,7 @@ a[href].direct-link:focus:visited,
 
 @media screen and (max-width: 600px) {
   .wrapper {
-    width: 70vw;
+    width: 90vw;
   }
   .post-wrapper {
     display: flex;
@@ -270,6 +270,6 @@ a[href].direct-link:focus:visited,
     padding-right: 2em;
   }
   .post-body {
-    max-width: 50vw;
+    max-width: 60vw;
   }
 }
