@@ -12,6 +12,9 @@
 * {
   box-sizing: border-box;
 }
+h2 {
+  margin: 50px 0 30px 0;
+}
 html,
 body {
   padding: 0;
@@ -22,8 +25,8 @@ body {
   flex-direction: row;
   justify-content: center;
   font-family: 'ibm_plex_sansregular';
-  line-height: 1.5;
-  font-size: 1.3em;
+  line-height: 23px;
+  font-size: 14px;
 }
 p:last-child {
   margin-bottom: 0;
