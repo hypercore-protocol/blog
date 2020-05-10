@@ -73,12 +73,11 @@ table th {
 
 pre,
 code {
-  font-family: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
   line-height: 1.5;
+  font-size: 20px;
 }
+
 pre {
-  font-size: 14px;
-  line-height: 1.375;
   direction: ltr;
   text-align: left;
   white-space: pre;
@@ -98,15 +97,13 @@ pre {
 .highlight-line {
   display: block;
   padding: 0.125em 1em;
-  text-decoration: none; /* override del, ins, mark defaults */
-  color: inherit; /* override del, ins, mark defaults */
+  text-decoration: none;
+  color: inherit;
 }
 
-/* allow highlighting empty lines */
 .highlight-line:empty:before {
   content: " ";
 }
-/* avoid double line breaks when using display: block; */
 .highlight-line + br {
   display: none;
 }

@@ -80,7 +80,7 @@ __(Maf's mount picture here)__
 Mounts open up lots of opportunities, both for more granular sharing and for fun multi-user applications. On the sharing side, you might create a `projects/` directory which contains mounts like `projects/my-module`, `projects/my-website` -- one drive for each thing you're working on. With mounts, you can share `my-website` on its own, without giving away access to everything in `projects/`. This pattern is especially handy in the daemon, which we'll talk about next.
 
 Things get more interesting when the drives you're mounting aren't your own.  We've had a lot of success with a "groups" pattern, wherein a "group owner" creates a top level group drive, and subsequently mounts "user profiles" within the group:
-```
+```bash
 /my-group  // Owned by the group owner (say User A)
   /user-a  // Owned by User A
   /user-b  // Owned by User B
@@ -121,8 +121,8 @@ We're hoping that the daemon provides a frictionless entry point both for end-us
 ## Getting Started
 
 The best way to jump into the Hyperdrive stack is to install the daemon. This can be done through NPM:
-```
-npm install hyperdrive-daemon -g
+```bash
+❯ npm install hyperdrive-daemon -g
 ```
 Once the daemon's installed, you'll have access to the `hyperdrive` CLI command. From here, you have a few options. It's best to consult the [daemon's README](https://github.com/andrewosh/hyperdrive-daemon) for a more detailed guide, but we'll highlight the key steps here.
 
@@ -131,8 +131,8 @@ Once the daemon's installed, you'll have access to the `hyperdrive` CLI command.
 *Note: FUSE is currently only available on Linux and OSX. The CLI's `import` and `export` commands can be used to move data in/out of drives on Windows.*
 
 Immediately after installation, you'll need to do a one-time setup step, which will request `sudo` access -- don't worry, the daemon itself does not run as root. This is necessary in order to configure the bundled FUSE kernel modules:
-```
-hyperdrive fuse-setup
+```bash
+❯ hyperdrive fuse-setup
 ```
 
 After this, start the daemon normally and you'll notice that your `~/Hyperdrive` directory exist and contains a subdirectory called `Network`. If you see `Network`, you're good to go.
