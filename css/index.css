@@ -53,7 +53,7 @@ header {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px dashed var(--lightgray);
+  border-bottom: 10px solid #000;
 }
 header:after {
   content: "";
