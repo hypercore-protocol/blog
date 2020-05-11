@@ -28,26 +28,32 @@ body {
   line-height: 23px;
   font-size: 14px;
 }
+@media screen and (min-width: 1500px) {
+  body {
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 600px) {
+  body {
+    line-height: 20px;
+  }
+}
 p:last-child {
   margin-bottom: 0;
 }
 p,
 .tmpl-post li,
-img {
+pre,
+img,
+video {
   max-width: 45em;
 }
 p,
-.tmpl-post li {
-  line-height: 1.6;
-}
 a[href] {
   color: var(--blue);
 }
 a[href]:visited {
   color: var(--navy);
-}
-main {
-  padding: 1rem;
 }
 header {
   padding-top: 2rem;
@@ -71,11 +77,21 @@ table th {
   padding-right: 1em;
 }
 
-pre,
-code {
-  line-height: 1.5;
-  font-size: 20px;
+@media screen and (min-width: 901px) {
+  pre,
+  code {
+    line-height: 1.5;
+    font-size: 14px;
+  }
 }
+@media screen and (max-width: 900px) {
+  pre,
+  code {
+    line-height: 1.2;
+    font-size: 10px;
+  }
+}
+
 
 pre {
   direction: ltr;
@@ -254,6 +270,9 @@ a[href].direct-link:focus:visited,
   .wrapper {
     width: 90vw;
   }
+  .post-body h1 {
+    font-size: 18px;
+  }
   .post-wrapper {
     display: flex;
     flex-direction: column
@@ -273,3 +292,23 @@ a[href].direct-link:focus:visited,
     max-width: 60vw;
   }
 }
+
+.video-container {
+  overflow: hidden;
+}
+.video-container video {
+  width: 100%;
+  margin-top: -50px;
+}
+.video-container-lg {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.video-container-lg video {
+  width: 70%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
