@@ -6,6 +6,7 @@ const pluginNavigation = require("@11ty/eleventy-navigation");
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
 const pluginTOC = require('eleventy-plugin-toc')
+const cleanCSS = require('clean-css')
 
 module.exports = function(eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
@@ -21,6 +22,14 @@ module.exports = function(eleventyConfig) {
     return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat("dd LLL yyyy");
   });
 
+  eleventyConfig.addNunjucksAsyncFilter('cssmin', (code, cb) => {
+    return new cleanCSS({
+      level: 2
+    }).minify(code, (err, output) => {
+      return cb(null, output.styles)
+    })
+  })
+
   // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#valid-date-string
   eleventyConfig.addFilter('htmlDateString', (dateObj) => {
     return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy-LL-dd');
@@ -31,6 +40,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("img");
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("video");
+  eleventyConfig.addPassthroughCopy("posts/webfonts");
 
   /* Markdown Overrides */
   let markdownLibrary = markdownIt({

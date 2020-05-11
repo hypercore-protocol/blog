@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ renderData.title or title or metadata.title }}</title>
     <meta name="Description" content="{{ renderData.description or description or metadata.description }}">
-    <link rel="stylesheet" href="{{ '/css/index.css' | url }}">
-    <link rel="stylesheet" href="{{ '/css/prism-themes/prism-base16-ateliersulphurpool.light.css' | url }}">
-    <link rel="stylesheet" href="{{ '/css/font-awesome/css/fontawesome.css' | url }}">
-    <link rel="stylesheet" href="{{ '/css/font-awesome/css/brands.css' | url }}">
-    <link rel="stylesheet" href="{{ '/css/fonts/index.css' | url }}">
+    {% set css %}
+     {% include "css/index.css" | url %}
+     {% include "css/prism-themes/prism-base16-ateliersulphurpool.light.css" | url %}
+     {% include "css/font-awesome/css/fontawesome.min.css" | url %}
+     {% include "css/font-awesome/css/brands.min.css" | url %}
+     {% include "css/fonts/index.css" | url %}
+    {% endset %}
     <link rel="alternate" href="{{ metadata.feed.path | url }}" type="application/atom+xml" title="{{ metadata.title }}">
+    <style>
+      {{ css | cssmin | safe }}
+    </style>
   </head>
   <body>
     <div class="wrapper">

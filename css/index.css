@@ -25,7 +25,7 @@ body {
   flex-direction: row;
   justify-content: center;
   font-family: 'ibm_plex_sansregular';
-  line-height: 23px;
+  line-height: 27px;
   font-size: 14px;
 }
 @media screen and (min-width: 1500px) {
@@ -46,7 +46,7 @@ p,
 pre,
 img,
 video {
-  max-width: 45em;
+  max-width: 55rem;
 }
 p,
 a[href] {
@@ -164,7 +164,7 @@ pre {
   margin-left: 1em;
   display: flex;
   flex-direction: row;
-  justify-content: right;
+  justify-content: flex-end;
   width: 200px;
 }
 .social-icon {
@@ -311,4 +311,21 @@ a[href].direct-link:focus:visited,
   margin-top: 50px;
   margin-bottom: 50px;
 }
+@media screen and (min-width: 1501px) {
+  #van-gogh-vid {
+    margin-left: -60px;
+  }
+  #tree-vid {
+    margin-left: -70px;
+  }
+}
+@media screen and (max-width: 1500px) {
+  #van-gogh-vid {
+    margin-left: -40px;
+  }
+  #tree-vid {
+    margin-left: -40px;
+  }
+}
+
 

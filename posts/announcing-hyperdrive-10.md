@@ -13,15 +13,15 @@ For the past year, we've been working hard on the v10 release of Hyperdrive. Aft
 
 Hyperdrive is a peer-to-peer filesystem that's designed to help you share files quickly and safely, directly from your computer. Hyperdrive v9, along with many other modules prefixed by 'hyper', has served as the backbone for [Dat](https://dat.foundation) for many years -- you might already be familiar with Hyperdrive if you've dug into Dat's internals.
 
-Leading up to this release, we've done a bit of restructuring: Hyperdrive and its many hyper-siblings now live under a small, technically-focused brand/organization called the [Hypercore Protocol](...). For more info about the change, check out [this post](...). Practically, this change means very little beyond branding, but we're hoping it will give the modules a chance to shine on their own. In light of that, here's a look inside Hyperdrive.
+Leading up to this release, we've done a bit of restructuring: Hyperdrive and its many hyper-siblings now live under a small, technically-focused brand/organization called the [Hypercore Protocol](https://hypercore-protocol.org). For more info about the change, check out [this post](...). Practically, this change means very little beyond branding, but we're hoping it will give the modules a chance to shine on their own. In light of that, here's a look inside Hyperdrive.
 
 In this post we'll step through some of the improvements we've made in v10, explain how Hyperdrive fits into the broader Hypercore Protocol ecosystem, and show you how to get started using it. This release is only the beginning, and we describe our next steps in the ["Looking Forward"](#looking-forward) section.
 
-Here's a quick TL;DR of what's new:
-1. __Improved Indexing__: We're using a new [HAMT](https://en.wikipedia.org/wiki/Hash_array_mapped_trie)-based indexing structure called a [Hypertrie](...), which gives huge perf/scaling boosts all around.
+Here's a TL;DR of what's new:
+1. __Improved Indexing__: We're using a new [HAMT](https://en.wikipedia.org/wiki/Hash_array_mapped_trie)-based indexing structure called a [Hypertrie](https://github.com/hypercore-protocol/hypertrie), which gives huge perf/scaling boosts all around.
 2. __Mounts__: You can now "link" other peoples' Hyperdrives into your own.
 3. __Hyperdrive Daemon__: We've created a cross-platform daemon that provides both FUSE and gRPC access to daemon-managed drives.
-4. __Better Foundations__: We've recently introduced the [Hyperswarm](...) DHT, and improvements to the [Hypercore protocol](...), which have helped make our whole stack snappier and more reliable.
+4. __Better Foundations__: We've recently introduced the [Hyperswarm](https://hypercore-protocol.org/#hyperswarm) DHT, and improvements to the [Hypercore protocol](https://github.com/hypercore-protocol/hypercore-protocol), which have helped make our whole stack snappier and more reliable.
 
 ## What's Hyperdrive?
 
@@ -34,7 +34,7 @@ Unlike BitTorrent, files can be added or modified after a drive is created, and 
 Importantly, drives support efficient random-access file reads, meaning that you can seek through a video and it will download only the portions of the video you're viewing, on-demand. We call this property "sparse downloading", and it's great for things like large websites (think all of Wikipedia mirrored to a drive) where readers only view single pages at a time.
 
 Here's an example of sparsely downloading images from a large drive:
-<div class="video-container-lg">
+<div class="video-container-lg" id="van-gogh-vid">
   <video src="/video/van_gogh.mp4" autoplay="" loop="" muted="" playsinline="" controls></video>
 </div>
 
@@ -44,7 +44,7 @@ Under the hood, Hyperdrive is built using two append-only log data structures ca
   <video src="/video/trie.mp4" autoplay="" loop="" muted="" playsinline="" controls></video>
 </div>
 
-To support performant filesystem operations, such as directory traversals, we've layered a indexing data structure on top of Hypercore called a Hypertrie, which is an append-only implementation of a [hashed array-mapped trie](...). Painting a complete picture of Hypertrie is a blog post in itself, but the most important takeaway is that it lets us locate file/directory metadata, which is potentially scattered across many peers, using `O(log_4(n))` network requests, worst case. In practice, we use a specialized Hypercore extension to make this dramatically faster (`O(1)` in most cases).
+To support performant filesystem operations, such as directory traversals, we've layered a indexing data structure on top of Hypercore called a Hypertrie, which is an append-only implementation of a [hashed array-mapped trie](https://en.wikipedia.org/wiki/Hash_array_mapped_trie). Painting a complete picture of Hypertrie is a blog post in itself, but the most important takeaway is that it lets us locate file/directory metadata, which is potentially scattered across many peers, using `O(log_4(n))` network requests, worst case. In practice, we use a specialized Hypercore extension to make this dramatically faster (`O(1)` in most cases).
 
 ## Better Performance and Reliability
 
@@ -105,8 +105,8 @@ Most importantly, the daemon serves as a central point for exposing drives to ex
 
 With FUSE, drives are instantly accessible to other programs. You can watch movies using VLC, load PDFs using your favorite reader program, and use Unix utilities like `find` and `ls` to explore drives. We go into more depth in the "Getting Started" section below.
 
-<div class="video-container-lg">
-  <video src="/video/tree.mp4" autoplay="" loop="" muted="" playsinline="" controls></video>
+<div class="video-container-lg" id="tree-vid">
+  <video src="/video/tree4.mp4" autoplay="" loop="" muted="" playsinline="" controls></video>
 </div>
 
 The `hyperdrive` CLI tool contains a handful of commands both for interacting with FUSE, and for displaying information about drives. It also provides `import` and `export` commands, for those users who don't want to mess around with `~/Hyperdrive`.
@@ -153,11 +153,12 @@ The `RemoteHyperdrive` API mirrors Hyperdrive's. The following code snippet will
 ```javascript
 const { HyperdriveClient } = require('hyperdrive-daemon-client')
 
-// Assuming the following is done in an async function
-const client = new HyperdriveClient() // Auto-connects to the daemon
+// Auto-connects to the daemon
+const client = new HyperdriveClient()
 await client.ready()
 
-const drive = await client.drive.get() // Creates a new drive
+// Creates a new drive and writes a file
+const drive = await client.drive.get()
 await drive.writeFile('foo.txt', 'bar')
 ```
 
@@ -168,57 +169,10 @@ The [Beaker Browser](https://beakerbrowser.com) makes heavy use of Hyperdrive in
 
 The [Beaker developer portal](https://beaker.dev) contains thorough docs and tutorials (Tip: open that site in Beaker to make the tutorials interactive!), so you'll be off the ground immediately, building Hyperdrives containing fully-featured web applications (think personal wikis, photo albums, blog aggregators, and more).
 
-__(Beaker overview screenshot here?)__
-
 ### Standalone
 You'll probably want to use the remote interface hyperdrive-daemon most of the time, but in case you don't want to use the daemon - perhaps in a one-off script or some kind of embedded scenario - you can use Hyperdrive as a module inside your program. The [README](https://github.com/mafintosh/hyperdrive) shows you how, and it's also where you'll find complete API docs.
 
-Here's a quick example of how you can use Hyperswarm to discover and sync contents from other peers using a drive. For brevity's sake we won't go into the details, but hopefully this end-to-end example highlights the simplicity of it all:
-
-*Note: To keep this even smaller, we're using a small helper module called the [hyperswarm replicator](https://github.com/hyperswarm/replicator), which wraps a few Hyperswarm setup details.*
-
-__(Use Paul's side-by-side code tabs thing here)__
-
-Code running on the drive creator's side:
-```javascript
-const hyperdrive = require('hyperdrive')
-const replicate = require('@hyperswarm/replicator')
-
-const driveToShare = hyperdrive('./writer-storage')
-driveToShare.writeFile('hello.txt', 'world', err => {
-  if (err) return console.error(err)
-
-  const swarm = replicate(driveToShare)
-  process.on('SIGINT', () => swarm.destroy())
-
-  // Let's say the drive's key is 1df13252...
-  const keyString = driveToShare.key.toString('hex')
-  console.log('Seeding drive:', keyString)
-})
-```
-
-Code running on the reader's side:
-```javascript
-const hyperdrive = require('hyperdrive')
-const replicate = require('@hyperswarm/replicator')
-
-// Assuming this is the key generated above.
-const key = Buffer.from('1df13252...', 'hex')
-const driveToRead = hyperdrive('./reader-storage', key)
-
-const swarm = replicate(driveToRead)
-process.on('SIGINT', () => swarm.destroy())
-
-driveToRead.on('peer-add', onPeerAdded)
-
-function onPeerAdded () {
-  const readOpts = { encoding: 'utf-8' }
-  driveToRead.readFile('hello.txt', readOpts, (err, contents) => {
-    if (err) return console.error(err)
-    console.log('Got contents:', contents)
-  })
-}
-```
+[Here's a Gist](https://gist.github.com/andrewosh/1f3ae698ba42f7a382a5b85ab5305b88) containing a small, end-to-end example of how you can use Hyperswarm to discover and sync a Hyperdrive from another peer.
 
 In the future, we plan on making a few detailed tutorials about programmatic Hyperdrive usage. Remember, if you're looking for the simplest solution, check out the daemon and/or Beaker!
 
@@ -238,19 +192,19 @@ And don't worry, the new trie will be fully backwards-compat with the one we're 
 
 The daemon affords us a bunch of cool opportunities by virtue of its storing all drives in a single place on-disk, and handling networking in one place. By having total control of storage/networking, we can perform optimizations across your entire drive collection.
 
-On the networking side, we're investigating methods for deduplicating block requests that have already been satisfied by other drives. This is a bit confusing, but it boils down to "you should never have to download the same data twice, even if its contained in different drives".
+On the networking side, we're investigating methods for deduplicating block requests that have already been satisfied by other drives. The end-goal here is: "you should never have to download the same data twice, even if its contained in different drives".
 
 On the storage side, we're considering supporting content-addressed block storage, meaning if you have two similar drives, only the set of unique blocks will be persisted on disk -- common blocks will only be stored once.
 
 ### Random-Access Writes
 
-While a writer can update their drives however they like (i.e. adding new files, deleting files, appending to files, etc.), certain operations are more efficient than others. Unfortunately, editing existing files is one of the inefficient ones -- it currently results in file duplication. This is bad news if you want to run a database or append to log files.
+While a writer can update their drives however they like (i.e. adding new files, deleting files, appending to files, etc.), certain operations are more efficient than others. Unfortunately, editing existing files is one of the inefficient ones -- it currently results in file duplication. This is bad news if you want to run a database on FUSE or append to log files.
 
 There are two ways to remedy this:
 1. Better garbage collection, where old versions of files can be cleared from disk easily (fine for simple cases, but still bad for databases).
 2. Efficient file updates, where writing to an existing file does not lead to data copying.
 
-We're exploring various approaches based on [inodes](https://en.wikipedia.org/wiki/Inode) for (2). As with general multiwriter, there's a tricky balancing act involved. More sophisticated indexing that supports these updates will unavoidably increase read latencies in files without random-access modifications. This won't cut it if you're watching a large movie, never modified after it was first written, from start to end.
+We're exploring various approaches based on [inodes](https://en.wikipedia.org/wiki/Inode) for (2). As with general multiwriter, there's a tricky balancing act involved. An index that supports these updates will unavoidably increase read latencies for files that don't have random-access modifications. This won't cut it if you're watching a large movie, never modified after it was first written, from start to end.
 
 We'll surely have to use a hybrid approach; we're still actively researching this.
 
@@ -277,12 +231,12 @@ Gearing up for this release has been a big group effort over the past year, and 
 A very special thanks goes to Samsung, whose generous [Samsung Next](https://samsungnext.com/) grant funded a massive chunk of this work. Huge thanks to Ricardo and the rest of the Samsung Next team!
 
 ## Learning More
-To learn more about how Hyperdrive works under the hood, your best bet is to check out the source code on GitHub. Our code's currently split across a number of repos, all within the [Hypercore Protocol](...) organization. Here are a few direct links to the stuff we've discussed in this post:
-* [Hyperdrive](...)
-* [Hyperdrive Daemon](...)
-* [Hypertrie](...)
-* [Hypercore](...)
-* [Hyperswarm](...)
+To learn more about how Hyperdrive works under the hood, your best bet is to check out the source code on GitHub. Our code's currently split across a number of repos, all within the [Hypercore Protocol](https://github.com/hypercore-protocol) organization. Here are a few direct links to the stuff we've discussed in this post:
+* [Hyperdrive](https://github.com/hypercore-protocol/hyperdrive)
+* [Hyperdrive Daemon](https://github.com/hypercore-protocol/hyperdrive-daemon)
+* [Hypercore](https://github.com/hypercore-protocol/hypercore)
+* [Hyperswarm](https://github.com/hyperswarm/hyperswarm)
+* [Hypertrie](https://github.com/hypercore-protocol/hypertrie)
 
 ## Chat with us
 If you have questions about Hyperdrive's design, or you run into bugs, shoot us a message in [GitHub Discussions](...) -- that's where we'll be having more focused, development-oriented conversations.
