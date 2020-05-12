@@ -163,6 +163,7 @@ pre {
   float: left;
   margin-left: 1em;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: flex-end;
   width: 200px;
@@ -175,37 +176,45 @@ pre {
 
 /* Posts list */
 .postlist {
-  list-style: none;
   padding: 0;
+  margin-top: 20px;
 }
 .postlist-item {
-  counter-increment: start-from -1;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  line-height: 1.2;
+  max-width: 55rem;
 }
 .postlist-item:before {
-  display: inline-block;
   pointer-events: none;
-  content: "" counter(start-from, decimal-leading-zero) ". ";
   line-height: 100%;
-  text-align: right;
 }
 .postlist-date,
 .postlist-item:before {
-  font-size: 0.8125em; /* 13px /16 */
+  font-size: 0.9em; /* 13px /16 */
   color: var(--darkgray);
 }
-.postlist-date {
-  word-spacing: -0.5px;
-}
 .postlist-link {
-  display: inline-block;
   padding: 0.25em 0.1875em; /* 4px 3px /16 */
 }
 .postlist-item-active .postlist-link {
   font-weight: bold;
 }
 .tmpl-home .postlist-link {
-  font-size: 1.1875em; /* 19px /16 */
-  font-weight: 700;
+  font-size: 1.2em; /* 19px /16 */
+  text-decoration-skip-ink: auto;
+  font-weight: 800;
+}
+@media screen and (max-width: 600px) {
+  .postlist-item {
+    width: 90vw;
+  }
+}
+@media screen and (min-width: 601px) {
+  .postlist-item {
+    width: 55rem;
+  }
 }
 
 
@@ -257,6 +266,10 @@ a[href].direct-link:focus:visited,
 /* Hypercore Protocol additions */
 .wrapper {
   max-width: 90vw;
+}
+.post-header {
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 .post-body h4 {
   color: var(--mediumgray);
@@ -321,11 +334,15 @@ a[href].direct-link:focus:visited,
 }
 @media screen and (max-width: 1500px) {
   #van-gogh-vid {
-    margin-left: -40px;
+    margin-left: -20px;
   }
   #tree-vid {
-    margin-left: -40px;
+    margin-left: -20px;
   }
 }
 
-
+footer {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+}

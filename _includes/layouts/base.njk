@@ -23,6 +23,7 @@
         <a href="https://hypercore-protocol.org">
           <img src="{{ '/img/hypercore-protocol.png' | url }}" class="logo"></img>
         </a>
+
         <h1 class="home"><a href="{{ '/' | url }}">{{ metadata.title }}</a></h1>
         <ul class="social">
           {% for icon in socialIcons %}
@@ -39,7 +40,9 @@
         {{ content | safe }}
       </main>
 
-      <footer></footer>
+      <footer>
+         © The <a href="https://hypercore-protocol.org">Hypercore Protocol</a> team
+      </footer>
 
       <!-- Current page: {{ page.url | url }} -->
     </div>

@@ -1,7 +1,7 @@
 ---
 title: Announcing Hyperdrive v10
 description: Hyperdrive is now faster and more reliable. Plus it comes with a daemon.
-date: 2020-05-13
+date: 2020-05-14
 first_author: Andrew Osheroff
 first_author_page: https://twitter.com/andrewosh
 tags:
@@ -17,7 +17,7 @@ Leading up to this release, we've done a bit of restructuring: Hyperdrive and it
 
 In this post we'll step through some of the improvements we've made in v10, explain how Hyperdrive fits into the broader Hypercore Protocol ecosystem, and show you how to get started using it. This release is only the beginning, and we describe our next steps in the ["Looking Forward"](#looking-forward) section.
 
-Here's a TL;DR of what's new:
+Here's the TL;DR:
 1. __Improved Indexing__: We're using a new [HAMT](https://en.wikipedia.org/wiki/Hash_array_mapped_trie)-based indexing structure called a [Hypertrie](https://github.com/hypercore-protocol/hypertrie), which gives huge perf/scaling boosts all around.
 2. __Mounts__: You can now "link" other peoples' Hyperdrives into your own.
 3. __Hyperdrive Daemon__: We've created a cross-platform daemon that provides both FUSE and gRPC access to daemon-managed drives.
@@ -239,7 +239,9 @@ To learn more about how Hyperdrive works under the hood, your best bet is to che
 * [Hypertrie](https://github.com/hypercore-protocol/hypertrie)
 
 ## Chat with us
-If you have questions about Hyperdrive's design, or you run into bugs, shoot us a message in [GitHub Discussions](...) -- that's where we'll be having more focused, development-oriented conversations.
+If you have questions about Hyperdrive's design or want to talk about the stack, message us on [Discord](https://discord.gg/ga5hxGf)-- that's where we'll be having development-oriented conversations.
+
+If you have usage questions or run into bugs, start a thread on our [GitHub Discussions page](https://github.com/hypercore-protocol/community/discussions).
 
 For higher-level chats about the Dat ecosystem and P2P more generally, chime in on the #dat channel on Freenode. We all hang out there too.
 
@@ -247,3 +249,5 @@ And if you want to say something more privately, email us at [hello@hypercore-pr
 
 ## Credits
 Big thanks to [@mafintosh](https://twitter.com/mafintosh) for the visualizations and [@pfrazee](https://twitter.com/pfrazee) for proofreading.
+
+In our demo videos, we used content from The Internet Archive's [van Gogh collection](https://archive.org/details/academictorrents_c8b687c984d3d902310f27d56759ed69f5e1b4a7).
