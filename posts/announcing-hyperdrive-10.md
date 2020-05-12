@@ -35,13 +35,13 @@ Importantly, drives support efficient random-access file reads, meaning that you
 
 Here's an example of sparsely downloading images from a large drive:
 <div class="video-container-lg" id="van-gogh-vid">
-  <video src="/video/van_gogh.mp4" autoplay="" loop="" muted="" playsinline="" controls></video>
+  <video src="/video/van_gogh.mp4" autoplay="" loop="" muted="" playsinline=""></video>
 </div>
 
 Under the hood, Hyperdrive is built using two append-only log data structures called [Hypercores](https://github.com/mafintosh/hypercore), one for an efficient metadata index and one for binary file content. You can learn more about Hypercore from the [Hypercore Protocol website](https://hypercore-protocol.org). Hypercore gives us a fast and secure foundation for exchanging ordered blocks of data, but a good filesystem depends a good index.
 
 <div class="video-container">
-  <video src="/video/trie.mp4" autoplay="" loop="" muted="" playsinline="" controls></video>
+  <video src="/video/trie.mp4" autoplay="" loop="" muted="" playsinline=""></video>
 </div>
 
 To support performant filesystem operations, such as directory traversals, we've layered a indexing data structure on top of Hypercore called a Hypertrie, which is an append-only implementation of a [hashed array-mapped trie](https://en.wikipedia.org/wiki/Hash_array_mapped_trie). Painting a complete picture of Hypertrie is a blog post in itself, but the most important takeaway is that it lets us locate file/directory metadata, which is potentially scattered across many peers, using `O(log_4(n))` network requests, worst case. In practice, we use a specialized Hypercore extension to make this dramatically faster (`O(1)` in most cases).
@@ -73,7 +73,7 @@ Hypercore gives Hyperdrive many of its nice features, such as sparse downloading
 In v10, we don't go all the way to a general multi-writer solution; solving multi-writer scalably, without introducing major performance penalties or introducing confusing UX, remains a research question for us. That said, v10 introduces mounts, which are pretty much "links" to other Hyperdrives that look and act like normal directories.
 
 <div class="video-container">
-  <video src="/video/metadata-and-content-and-mounts.mp4" autoplay="" loop="" muted="" playsinline=""controls></video>
+  <video src="/video/metadata-and-content-and-mounts.mp4" autoplay="" loop="" muted="" playsinline=""></video>
 </div>
 
 Mounts open up lots of opportunities, both for more granular sharing and for fun multi-user applications. On the sharing side, you might create a `projects/` directory which contains mounts like `projects/my-module`, `projects/my-website` -- one drive for each thing you're working on. With mounts, you can share `my-website` on its own, without giving away access to everything in `projects/`. This pattern is especially handy in the daemon, which we'll talk about next.
@@ -106,7 +106,7 @@ Most importantly, the daemon serves as a central point for exposing drives to ex
 With FUSE, drives are instantly accessible to other programs. You can watch movies using VLC, load PDFs using your favorite reader program, and use Unix utilities like `find` and `ls` to explore drives. We go into more depth in the "Getting Started" section below.
 
 <div class="video-container-lg" id="tree-vid">
-  <video src="/video/tree4.mp4" autoplay="" loop="" muted="" playsinline="" controls></video>
+  <video src="/video/tree4.mp4" autoplay="" loop="" muted="" playsinline=""></video>
 </div>
 
 The `hyperdrive` CLI tool contains a handful of commands both for interacting with FUSE, and for displaying information about drives. It also provides `import` and `export` commands, for those users who don't want to mess around with `~/Hyperdrive`.

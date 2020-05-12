@@ -4,7 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ renderData.title or title or metadata.title }}</title>
+
+    <!-- SEO -->
     <meta name="Description" content="{{ renderData.description or description or metadata.description }}">
+    <meta name="keywords" content="decentralization,hypercore,peer-to-peer,p2p,hyperdrive">
+
+    <!-- Social -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@HypercoreProto">
+    <meta name="twitter:creator" content="@HypercoreProto">
+    <meta name="og:title" content="The Hypercore Protocol">
+    <meta name="og:description" content="Building blocks for making fast and scalable peer-to-peer applications.">
+
     {% set css %}
      {% include "css/index.css" | url %}
      {% include "css/prism-themes/prism-base16-ateliersulphurpool.light.css" | url %}
