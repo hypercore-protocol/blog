@@ -18,8 +18,8 @@ Leading up to this release, we've done a bit of restructuring: Hyperdrive and it
 In this post we'll step through some of the improvements we've made in v10, explain how Hyperdrive fits into the broader Hypercore Protocol ecosystem, and show you how to get started using it. This release is only the beginning, and we describe our next steps in the ["Looking Forward"](#looking-forward) section.
 
 Here's the TL;DR:
-1. __Improved Indexing__: We're using a new [HAMT](https://en.wikipedia.org/wiki/Hash_array_mapped_trie)-based indexing structure called a [Hypertrie](https://github.com/hypercore-protocol/hypertrie), which gives huge perf/scaling boosts all around.
-2. __Mounts__: You can now "link" other peoples' Hyperdrives into your own.
+1. __Improved Indexing__: We're using a new [HAMT](https://en.wikipedia.org/wiki/Hash_array_mapped_trie)-based indexing structure called a [Hypertrie](https://github.com/hypercore-protocol/hypertrie), which gives huge perf/scaling boosts.
+2. __Mounts__: You can now "link" other peoples' drives into your own.
 3. __Hyperdrive Daemon__: We've created a cross-platform daemon that provides both FUSE and gRPC access to daemon-managed drives.
 4. __Better Foundations__: We've recently introduced the [Hyperswarm](https://hypercore-protocol.org/#hyperswarm) DHT, and improvements to the [Hypercore protocol](https://github.com/hypercore-protocol/hypercore-protocol), which have helped make our whole stack snappier and more reliable.
 

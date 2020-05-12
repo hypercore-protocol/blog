@@ -81,14 +81,22 @@ table th {
   pre,
   code {
     line-height: 1.5;
-    font-size: 14px;
+    font-size: 15px;
+  }
+  p,
+  .tmpl-post li,
+  pre,
+  img,
+  code,
+  video {
+    max-width: 55rem;
   }
 }
 @media screen and (max-width: 1500px) {
   pre,
   code {
     line-height: 1.2;
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 
@@ -275,6 +283,11 @@ a[href].direct-link:focus:visited,
   margin-bottom: .1em;
 }
 
+.post-body li {
+  max-width: 40rem;
+  margin-bottom: 10px;
+}
+
 strong {
   font-weight: 900;
 }
@@ -309,6 +322,7 @@ strong {
 .video-container {
   width: 100%;
   margin-top: 50px;
+  margin-bottom: 40px;
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -317,20 +331,43 @@ strong {
 .video-container-lg {
   margin-top: 40px;
   margin-bottom: 40px;
+  width: 90%;
   display: flex;
   justify-content: center;
   overflow: hidden;
 }
 
+video {
+  height: 340px;
+}
+
 .video-container video {
   object-fit: contain;
-  margin-top: -100px;
+  margin-top: -50px;
   padding: 0;
 }
 
 .video-container-lg video {
   object-fit: contain;
   padding: 0;
+}
+
+@media screen and (max-width: 800px) {
+  video {
+    height: 200px;
+  }
+  .video-container video {
+    margin-top: -30px;
+  }
+  .video-container-lg {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  video {
+    height: 512px;
+  }
 }
 
 footer {
