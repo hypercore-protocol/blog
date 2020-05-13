@@ -5,8 +5,8 @@
   --gray: #C0C0C0;
   --mediumgray: #888;
   --darkgray: #333;
-  --navy: #17050F;
-  --blue: #082840;
+  --navy: #000000;
+  --blue: #000000;
   --white: #fff;
 }
 * {
@@ -96,7 +96,6 @@ table th {
   pre,
   code {
     line-height: 1.2;
-    font-size: 12px;
   }
 }
 
@@ -368,6 +367,10 @@ video {
   video {
     height: 512px;
   }
+}
+
+h1 {
+  margin-top: 40px;
 }
 
 footer {
