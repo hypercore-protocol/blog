@@ -241,8 +241,6 @@ If you have questions about Hyperdrive's design, or want to talk about the stack
 
 If you have usage questions or run into bugs, start a thread on our [GitHub Discussions page](https://github.com/hypercore-protocol/community/discussions).
 
-And to get in touch with us directly, email the team at [hello@hypercore-protocol.org](mailto:hello@hypercore-protocol.org).
-
 ## Credits
 Big thanks to [@mafintosh](https://twitter.com/mafintosh) for the visualizations and [@pfrazee](https://twitter.com/pfrazee) for proofreading.
 
