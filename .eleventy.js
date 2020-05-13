@@ -40,6 +40,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("img");
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("video");
+  eleventyConfig.addPassthroughCopy("webfonts");
   eleventyConfig.addPassthroughCopy("posts/webfonts");
 
   /* Markdown Overrides */
