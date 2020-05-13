@@ -19,7 +19,7 @@
 		<id>https://blog.hypercore-protocol.org/posts/announcing-hyperdrive-10/</id>
 		<content type="html">&lt;p&gt;For the past year, we&#39;ve been working hard on the v10 release of Hyperdrive. After a long period of beta testing, we&#39;re excited to announce that it&#39;s ready for general use!&lt;/p&gt;
 &lt;p&gt;Hyperdrive is a peer-to-peer filesystem that&#39;s designed to help you share files quickly and safely, directly from your computer. Hyperdrive v9, along with many other modules prefixed by &#39;hyper&#39;, has served as the backbone for &lt;a href=&quot;https://dat.foundation/&quot;&gt;Dat&lt;/a&gt; for many years -- you might already be familiar with Hyperdrive if you&#39;ve dug into Dat&#39;s internals.&lt;/p&gt;
-&lt;p&gt;Leading up to this release, we&#39;ve done a bit of restructuring: Hyperdrive and its many hyper-siblings now live under a small, technically-focused brand/organization called the &lt;a href=&quot;https://hypercore-protocol.org/&quot;&gt;Hypercore Protocol&lt;/a&gt;. For more info about the change, check out &lt;a href=&quot;https://blog.hypercore-protocol.org/posts/announcing-hyperdrive-10/...&quot;&gt;this post&lt;/a&gt;. Practically, this change means very little beyond branding, but we&#39;re hoping it will give the modules a chance to shine on their own. In light of that, here&#39;s a look inside Hyperdrive.&lt;/p&gt;
+&lt;p&gt;Leading up to this release, we&#39;ve done a bit of restructuring: Hyperdrive and its many hyper-siblings now live under a small, technically-focused brand/organization called the &lt;a href=&quot;https://hypercore-protocol.org/&quot;&gt;Hypercore Protocol&lt;/a&gt;. Practically, this change means very little beyond branding, but we&#39;re hoping it will give the modules a chance to shine on their own. In light of that, here&#39;s a look inside Hyperdrive.&lt;/p&gt;
 &lt;p&gt;In this post we&#39;ll step through some of the improvements we&#39;ve made in v10, explain how Hyperdrive fits into the broader Hypercore Protocol ecosystem, and show you how to get started using it. This release is only the beginning, and we describe our next steps in the &lt;a href=&quot;#looking-forward&quot;&gt;&amp;quot;Looking Forward&amp;quot;&lt;/a&gt; section.&lt;/p&gt;
 &lt;p&gt;Here&#39;s the TL;DR:&lt;/p&gt;
 &lt;ol&gt;
@@ -147,8 +147,13 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;chat-with-us&quot;&gt;Chat with us &lt;a class=&quot;direct-link&quot; href=&quot;#chat-with-us&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;If you have questions about Hyperdrive&#39;s design, or want to talk about the stack, message us on &lt;a href=&quot;https://chat.hypercore-protocol.org/&quot;&gt;Discord&lt;/a&gt; -- that&#39;s where we&#39;ll be having development-oriented conversations.&lt;/p&gt;
-&lt;p&gt;If you have usage questions or run into bugs, start a thread on our &lt;a href=&quot;https://github.com/hypercore-protocol/community/discussions&quot;&gt;GitHub Discussions page&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;And always feel free to shoot us a DM on &lt;a href=&quot;https://twitter.com/HypercoreProto&quot;&gt;Twitter&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you run into any bugs, go ahead and open issues on our &lt;a href=&quot;https://github.com/hypercore-protocol/community&quot;&gt;Community repo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And also feel free to send DMs to anyone on the team:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/mafintosh&quot;&gt;@mafintosh&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/pfrazee&quot;&gt;@pfrazee&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://twitter.com/andrewosh&quot;&gt;@andrewosh&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&quot;credits&quot;&gt;Credits &lt;a class=&quot;direct-link&quot; href=&quot;#credits&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Big thanks to &lt;a href=&quot;https://twitter.com/mafintosh&quot;&gt;@mafintosh&lt;/a&gt; for the visualizations and &lt;a href=&quot;https://twitter.com/pfrazee&quot;&gt;@pfrazee&lt;/a&gt; for proofreading.&lt;/p&gt;
 &lt;p&gt;In our demo videos, we used content from The Internet Archive&#39;s &lt;a href=&quot;https://archive.org/details/academictorrents_c8b687c984d3d902310f27d56759ed69f5e1b4a7&quot;&gt;van Gogh collection&lt;/a&gt;.&lt;/p&gt;

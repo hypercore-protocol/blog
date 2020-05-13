@@ -13,7 +13,7 @@ For the past year, we've been working hard on the v10 release of Hyperdrive. Aft
 
 Hyperdrive is a peer-to-peer filesystem that's designed to help you share files quickly and safely, directly from your computer. Hyperdrive v9, along with many other modules prefixed by 'hyper', has served as the backbone for [Dat](https://dat.foundation) for many years -- you might already be familiar with Hyperdrive if you've dug into Dat's internals.
 
-Leading up to this release, we've done a bit of restructuring: Hyperdrive and its many hyper-siblings now live under a small, technically-focused brand/organization called the [Hypercore Protocol](https://hypercore-protocol.org). For more info about the change, check out [this post](...). Practically, this change means very little beyond branding, but we're hoping it will give the modules a chance to shine on their own. In light of that, here's a look inside Hyperdrive.
+Leading up to this release, we've done a bit of restructuring: Hyperdrive and its many hyper-siblings now live under a small, technically-focused brand/organization called the [Hypercore Protocol](https://hypercore-protocol.org). Practically, this change means very little beyond branding, but we're hoping it will give the modules a chance to shine on their own. In light of that, here's a look inside Hyperdrive.
 
 In this post we'll step through some of the improvements we've made in v10, explain how Hyperdrive fits into the broader Hypercore Protocol ecosystem, and show you how to get started using it. This release is only the beginning, and we describe our next steps in the ["Looking Forward"](#looking-forward) section.
 
@@ -239,9 +239,12 @@ To learn more about how Hyperdrive works under the hood, your best bet is to che
 ## Chat with us
 If you have questions about Hyperdrive's design, or want to talk about the stack, message us on [Discord](https://chat.hypercore-protocol.org) -- that's where we'll be having development-oriented conversations.
 
-If you have usage questions or run into bugs, start a thread on our [GitHub Discussions page](https://github.com/hypercore-protocol/community/discussions).
+If you run into any bugs, go ahead and open issues on our [Community repo](https://github.com/hypercore-protocol/community).
 
-And always feel free to shoot us a DM on [Twitter](https://twitter.com/HypercoreProto).
+And also feel free to send DMs to anyone on the team:
+* [@mafintosh](https://twitter.com/mafintosh)
+* [@pfrazee](https://twitter.com/pfrazee)
+* [@andrewosh](https://twitter.com/andrewosh)
 
 ## Credits
 Big thanks to [@mafintosh](https://twitter.com/mafintosh) for the visualizations and [@pfrazee](https://twitter.com/pfrazee) for proofreading.
