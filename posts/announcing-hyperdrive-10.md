@@ -25,7 +25,7 @@ Here's the TL;DR:
 
 ## What's Hyperdrive?
 
-Hyperdrive is a POSIX-compatible filesystem implementation, written in NodeJS, that's designed to be the storage layer for fast, scalable, and secure peer-to-peer applications. For most developers, working with a Hyperdrive should feel just like using Node's standard `fs` module, with only minor additions. Our main goal has always been to make it possible to share entire filesystems with others using a single 32-byte key (i.e. `hyper://ab13d...`). We'll refer to Hyperdrive filesystems as "drives" from here on out.
+Hyperdrive is a POSIX-compatible filesystem implementation, written in Node.js, that's designed to be the storage layer for fast, scalable, and secure peer-to-peer applications. For most developers, working with a Hyperdrive should feel just like using Node's standard `fs` module, with only minor additions. Our main goal has always been to make it possible to share entire filesystems with others using a single 32-byte key (i.e. `hyper://ab13d...`). We'll refer to Hyperdrive filesystems as "drives" from here on out.
 
 Drives are great for applications in which a single writer wants to distribute large, mutable collections of files to many readers. A file collection might be a video library, a personal blog, a scientific dataset, or what have you. Like BitTorrent, peers can download files from other peers without sacrificing trust (drive contents are signed by the original author).
 
@@ -95,13 +95,13 @@ It's also easy to create mounts in the daemon through the CLI, which we'll descr
 
 ## The Hyperdrive Daemon
 
-Hyperdrive is built with modular storage and networking in mind -- you can store drive contents however you like, and you can replicate them over any NodeJS stream. This flexibility has benefits, but it makes it harder to get started. To that end, we've created a cross-platform background service (a daemon) that handles storage/networking for you, while giving you a variety of ways to access daemon-managed drives.
+Hyperdrive is built with modular storage and networking in mind -- you can store drive contents however you like, and you can replicate them over any Node.js stream. This flexibility has benefits, but it makes it harder to get started. To that end, we've created a cross-platform background service (a daemon) that handles storage/networking for you, while giving you a variety of ways to access daemon-managed drives.
 
 The daemon's a long-running service, so it can keep your drives online and available to readers. It's also great for DHT health: since the node on your computer is stable, the DHT's routing table contains fewer offline nodes. This translates to faster key lookups, meaning faster loading times.
 
-Most importantly, the daemon serves as a central point for exposing drives to external services -- currently we support a [gRPC](https://grpc.io/) API, with a corresponding [NodeJS client library](https://github.com/andrewosh/hyperdrive-daemon-client), and a FUSE interface.
+Most importantly, the daemon serves as a central point for exposing drives to external services -- currently we support a [gRPC](https://grpc.io/) API, with a corresponding [Node.js client library](https://github.com/andrewosh/hyperdrive-daemon-client), and a FUSE interface.
 
-[FUSE](https://github.com/libfuse/libfuse) allows us to emulate a native filesystem directory from within our NodeJS code. It lets us turn Hyperdrives into normal directories on your computer! This means that whenever the daemon is running, you'll be able to access drives directly from within the OSX Finder, say, as virtual directories inside `~/Hyperdrive`.
+[FUSE](https://github.com/libfuse/libfuse) allows us to emulate a native filesystem directory from within our Node.js code. It lets us turn Hyperdrives into normal directories on your computer! This means that whenever the daemon is running, you'll be able to access drives directly from within the OSX Finder, say, as virtual directories inside `~/Hyperdrive`.
 
 With FUSE, drives are instantly accessible to other programs. You can watch movies using VLC, load PDFs using your favorite reader program, and use Unix utilities like `find` and `ls` to explore drives. We go into more depth in the "Getting Started" section below.
 
@@ -111,7 +111,7 @@ With FUSE, drives are instantly accessible to other programs. You can watch movi
 
 The `hyperdrive` CLI tool contains a handful of commands both for interacting with FUSE, and for displaying information about drives. It also provides `import` and `export` commands, for those users who don't want to mess around with `~/Hyperdrive`.
 
-While the `~/Hyperdrive` directory was added to simplify end-user UX, the gRPC API exists for developers -- you can now program with Hyperdrive in any language, without needing to deal with tricky networking APIs. If you're using NodeJS, the client library gives you a `RemoteHyperdrive` interface that feels exactly like a normal drive. To get started, jump [here](#With-the-Client-Library).
+While the `~/Hyperdrive` directory was added to simplify end-user UX, the gRPC API exists for developers -- you can now program with Hyperdrive in any language, without needing to deal with tricky networking APIs. If you're using Node.js, the client library gives you a `RemoteHyperdrive` interface that feels exactly like a normal drive. To get started, jump [here](#With-the-Client-Library).
 
 We're hoping that the daemon provides a frictionless entry point both for end-users looking to share data, and for developers who want to build apps and services using Hyperdrive. If you have thoughts or feedback on the UX, don't hesitate to drop into our chat!
 
@@ -160,7 +160,7 @@ const drive = await client.drive.get()
 await drive.writeFile('foo.txt', 'bar')
 ```
 
-The daemon's README gives more examples. As of today, we only have a NodeJS client, but the daemon's [gRPC schemas](https://github.com/andrewosh/hyperdrive-schemas/tree/master/schemas/daemon) are available, and we'd welcome any efforts to create clients in other languages.
+The daemon's README gives more examples. As of today, we only have a Node.js client, but the daemon's [gRPC schemas](https://github.com/andrewosh/hyperdrive-schemas/tree/master/schemas/daemon) are available, and we'd welcome any efforts to create clients in other languages.
 
 ### With Beaker
 The [Beaker Browser](https://beakerbrowser.com) makes heavy use of Hyperdrive internally. Beaker 1.0 Beta, which is also being released *today*, actually installs and manages the daemon for you in the background! Beaker comes packed with authoring tools for creating P2P websites and sharing them with others.
@@ -218,9 +218,9 @@ With `clearUntagged`, random-access writes become less essential, so we're hopin
 
 Mounts currently cannot overlap with one another. The group model works around this limitation, enabling useful multi-user applications, but there are many cases where you'd like to display a "merged view" over many drives.
 
-To accomplish this, we're thinking about ways to extend mounts. The "trie controller" design we alluded to above makes experimentation easier here. A simple union mounts feature, without any opinionated conflict resolution (i.e. displaying conflicting files side-by-side), is a natural next step. 
+To accomplish this, we're thinking about ways to extend mounts. The "trie controller" design we alluded to above makes experimentation easier here. A simple union mounts feature, without any opinionated conflict resolution (i.e. displaying conflicting files side-by-side), is a natural next step.
 
-A general multiwriter solution, with customizable hooks for conflict resolution, remains on our to-do list, but that's still a far-future feature. We want to see how far we can go with mounts first. 
+A general multiwriter solution, with customizable hooks for conflict resolution, remains on our to-do list, but that's still a far-future feature. We want to see how far we can go with mounts first.
 
 ## Many Thanks
 
