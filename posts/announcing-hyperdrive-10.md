@@ -237,7 +237,7 @@ To learn more about how Hyperdrive works under the hood, your best bet is to che
 * [Hypertrie](https://github.com/hypercore-protocol/hypertrie)
 
 ## Chat with us
-If you have questions about Hyperdrive's design, or want to talk about the stack, message us on [Discord](https://discord.gg/ga5hxGf) -- that's where we'll be having development-oriented conversations.
+If you have questions about Hyperdrive's design, or want to talk about the stack, message us on [Discord](https://chat.hypercore-protocol.org) -- that's where we'll be having development-oriented conversations.
 
 If you have usage questions or run into bugs, start a thread on our [GitHub Discussions page](https://github.com/hypercore-protocol/community/discussions).
 
