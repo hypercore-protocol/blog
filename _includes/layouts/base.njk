@@ -13,8 +13,9 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@HypercoreProto">
     <meta name="twitter:creator" content="@HypercoreProto">
-    <meta name="og:title" content="The Hypercore Protocol">
-    <meta name="og:description" content="Building blocks for making fast and scalable peer-to-peer applications.">
+    <meta name="og:title" content="{{ renderData.description or description or metadata.description }}">
+    <meta name="og:description" content="{{ renderData.description or description or metadata.description }}">
+    <meta name="twitter:image" content="/img/hypercore-protocol.png">
 
     {% set css %}
      {% include "css/index.css" | url %}
