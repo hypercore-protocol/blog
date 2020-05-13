@@ -212,12 +212,12 @@ pre {
   text-decoration-skip-ink: auto;
   font-weight: 800;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
   .postlist-item {
     width: 90vw;
   }
 }
-@media screen and (min-width: 601px) {
+@media screen and (min-width: 701px) {
   .postlist-item {
     width: 45rem;
   }
