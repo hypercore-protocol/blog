@@ -167,6 +167,8 @@ The [Beaker Browser](https://beakerbrowser.com) makes heavy use of Hyperdrive in
 
 The [Beaker developer portal](https://beaker.dev) contains thorough docs and tutorials (Tip: open that site in Beaker to make the tutorials interactive!), so you'll be off the ground immediately, building Hyperdrives containing fully-featured web applications (think personal wikis, photo albums, blog aggregators, and more).
 
+*You can find this blog post in Beaker at [hyper://e36050c2651b2bd0bd265fc311c122122a5490bc11a17606201964246b69e4ef](hyper://e36050c2651b2bd0bd265fc311c122122a5490bc11a17606201964246b69e4ef)!*
+
 ### Standalone
 You'll probably want to use the daemon/client most of the time, but in case you don't - perhaps in a one-off script or some kind of embedded scenario - you can use Hyperdrive as a module inside your program. The [README](https://github.com/hypercore-protocol/hyperdrive) shows you how, and it's also where you'll find complete API docs.
 
