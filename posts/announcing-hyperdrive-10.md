@@ -25,7 +25,7 @@ Here's the TL;DR:
 
 ## What's Hyperdrive?
 
-Hyperdrive is a POSIX-compatible filesystem implementation, written in Node.js, that's designed to be the storage layer for fast, scalable, and secure peer-to-peer applications. For most developers, working with a Hyperdrive should feel just like using Node's standard `fs` module, with only minor additions. Our main goal has always been to make it possible to share entire filesystems with others using a single 32-byte key (i.e. `hyper://ab13d...`). We'll refer to Hyperdrive filesystems as "drives" from here on out.
+Hyperdrive is a POSIX-like filesystem implementation, written in Node.js, that's designed to be the storage layer for fast, scalable, and secure peer-to-peer applications. For most developers, working with a Hyperdrive should feel just like using Node's standard `fs` module, with only minor additions. Our main goal has always been to make it possible to share entire filesystems with others using a single 32-byte key (i.e. `hyper://ab13d...`). We'll refer to Hyperdrive filesystems as "drives" from here on out.
 
 Drives are great for applications in which a single writer wants to distribute large, mutable collections of files to many readers. A file collection might be a video library, a personal blog, a scientific dataset, or what have you. Like BitTorrent, peers can download files from other peers without sacrificing trust (drive contents are signed by the original author).
 
