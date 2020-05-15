@@ -26,7 +26,7 @@ body {
   justify-content: center;
   font-family: 'ibm_plex_sansregular';
   line-height: 27px;
-  font-size: 14px;
+  font-size: 16px;
 }
 @media screen and (min-width: 1500px) {
   body {
@@ -35,7 +35,8 @@ body {
 }
 @media screen and (max-width: 600px) {
   body {
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 22px;
   }
 }
 p:last-child {
