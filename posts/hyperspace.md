@@ -23,7 +23,7 @@ Hypercore and Hyperswarm are the "foundational" pieces of the stack -- our other
 
 ## Intro
 
-Back in May, we released Hyperdrive v10, which introduced major new features, like indexing improvements and mounts. To get folks off the ground quickly, we paired v10 with a new Hyperdrive daemon, providing simple, out-of-the-box answers for managing drive storage and Hyperswarm networking. The daemon was designed for ease of use and diverse use-cases, bundling a CLI, a gRPC API, and FUSE support. We imagined `hyperdrive start` getting you 90% of the way to creating and sharing drives, without burdoning you with many technical details. If you're intested in how we approached this, check out our earlier [blog post]().
+Back in May, we released Hyperdrive v10, which introduced major new features, like indexing improvements and mounts. To get folks off the ground quickly, we paired v10 with a new Hyperdrive daemon, providing simple, out-of-the-box answers for managing drive storage and Hyperswarm networking. The daemon was designed for ease of use and diverse use-cases, bundling a CLI, a gRPC API, and FUSE support. We imagined `hyperdrive start` getting you 90% of the way to creating and sharing drives, without burdoning you with many technical details. If you're intested in how we approached this, check out our earlier [blog post](https://blog.hypercore-protocol.org/posts/announcing-hyperdrive-10/).
 
 Our relationship with the daemon was bright but brief! It's been working (mostly) reliably in the [Beaker 1.0 Beta](https://beakerbrowser.com), and for the first time it let us ship a single, unified product. That said, after launch we began adding support for new Hypercore-based data structures, and we realized this would require both substantial refactoring of the daemon internals and extensions to the API. At the end of the day, the daemon was built with Hyperdrives in mind, and we saw a future of complexity and bloat in extending its scope in that direction.
 
@@ -44,13 +44,13 @@ We've also gotten rid of PM2 in Hyperspace -- the service only runs in the foreg
 
 ### The API
 
-We're constantly adding new features to the higher-level data structures (like Hyperdrive), but the Hypercore and Hyperswarm APIs are updated relatively infrequently. We can take advantage of that to keep the Hyperspace API as small and stable as possible. We also wanted the API to be clear and easy-to-use, so we opted to use a custom binary RPC system called [HRPC]() instead of gRPC.
+We're constantly adding new features to the higher-level data structures (like Hyperdrive), but the Hypercore and Hyperswarm APIs are updated relatively infrequently. We can take advantage of that to keep the Hyperspace API as small and stable as possible. We also wanted the API to be clear and easy-to-use, so we opted to use a custom binary RPC system called [HRPC](https://github.com/mafintosh/hrpc) instead of gRPC.
 
-Like gRPC, [HRPC service definitions]() are written as Protocol Buffers schemas. Unlike gRPC, HRPC is transport-agnostic (you can easily pipe it over a WebSocket, for example) and has simpler built-in error handling, which assists in debugging. It's super easy to use, and it's a much smaller dependency to boot.
+Like gRPC, [HRPC service definitions](https://github.com/hypercore-protocol/hyperspace-rpc/blob/master/schema.proto) are written as Protocol Buffers schemas. Unlike gRPC, HRPC is transport-agnostic (you can easily pipe it over a WebSocket, for example) and has simpler built-in error handling, which assists in debugging. It's super easy to use, and it's a much smaller dependency to boot.
 
 ### The Client Library
 
-We've shot for API parity between [`Corestore`](), [`Hypercore`](), the [`@corestore/networker`]() and their remote counterparts. As such you should be able to drop a `RemoteHypercore` into any module that currently consumes a `Hypercore`, and likewise for the other two.
+We've shot for API parity between [`Corestore`](https://github.com/andrewosh/corestore), [`Hypercore`](https://github.com/hypercore-protocol/hypercore), the [`@corestore/networker`](https://github.com/andrewosh/corestore-networker) and their remote counterparts. As such you should be able to drop a `RemoteHypercore` into any module that currently consumes a `Hypercore`, and likewise for the other two.
 
 As an example, updating Hyperdrive to use `RemoteHypercores` was just a matter of dropping in a `RemoteCorestore` as the first argument:
 ```javascript
