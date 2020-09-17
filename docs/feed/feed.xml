@@ -215,7 +215,7 @@ Listening on /tmp/hyperspace.sock
 &lt;h2 id=&quot;stay-in-touch&quot;&gt;Stay in Touch &lt;a class=&quot;direct-link&quot; href=&quot;#stay-in-touch&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Having tested Hyperspace for a few months now, we&#39;re very excited about this release. You might still hit a few bugs here or there, so you can reach us and join the discussion in the &lt;a href=&quot;https://chat.hypercore-protocol.org/&quot;&gt;Hypercore Protocol Discord&lt;/a&gt;. As always, feel free to open issues on the GitHub repos as well.&lt;/p&gt;
 &lt;h2 id=&quot;thanks&quot;&gt;Thanks &lt;a class=&quot;direct-link&quot; href=&quot;#thanks&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;And thanks to the community members who have jumped in to fix bugs, add docs, and explore what Hyperspace can do. You definitely won&#39;t want to miss &lt;a href=&quot;https://github.com/frando/hyperspace-rs&quot;&gt;Frando&#39;s Rust implementation&lt;/a&gt;, which paves the way for working with classic, Node-based Hypercores in Rust, and &lt;a href=&quot;https://github.com/datrs&quot;&gt;vice versa&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And thanks to the community members who have jumped in to fix bugs, add docs, and explore what Hyperspace can do. You definitely won&#39;t want to miss &lt;a href=&quot;https://github.com/frando/hyperspace-rs&quot;&gt;Frando&#39;s Rust implementation&lt;/a&gt;, which paves the way for working with classic, Node.js-based Hypercores in Rust, and &lt;a href=&quot;https://github.com/datrs&quot;&gt;vice versa&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;- Andrew and team&lt;/p&gt;
 </content>
 	</entry>

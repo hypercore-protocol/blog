@@ -101,6 +101,6 @@ Having tested Hyperspace for a few months now, we're very excited about this rel
 
 ## Thanks
 
-And thanks to the community members who have jumped in to fix bugs, add docs, and explore what Hyperspace can do. You definitely won't want to miss [Frando's Rust implementation](https://github.com/frando/hyperspace-rs), which paves the way for working with classic, Node-based Hypercores in Rust, and [vice versa](https://github.com/datrs).
+And thanks to the community members who have jumped in to fix bugs, add docs, and explore what Hyperspace can do. You definitely won't want to miss [Frando's Rust implementation](https://github.com/frando/hyperspace-rs), which paves the way for working with classic, Node.js-based Hypercores in Rust, and [vice versa](https://github.com/datrs).
 
 \- Andrew and team
