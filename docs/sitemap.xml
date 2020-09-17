@@ -12,12 +12,22 @@
   </url>
   
   <url>
-    <loc>https://blog.hypercore-protocol.org/tags/hyperdrive/</loc>
+    <loc>https://blog.hypercore-protocol.org/tags/hypercore/</loc>
+    <lastmod>2020-05-09</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.hypercore-protocol.org/tags/hyperspace/</loc>
     <lastmod>2020-05-09</lastmod>
   </url>
   
   <url>
     <loc>https://blog.hypercore-protocol.org/tags/release/</loc>
+    <lastmod>2020-05-09</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.hypercore-protocol.org/tags/hyperdrive/</loc>
     <lastmod>2020-05-09</lastmod>
   </url>
   
@@ -29,5 +39,10 @@
   <url>
     <loc>https://blog.hypercore-protocol.org/posts/announcing-hyperdrive-10/</loc>
     <lastmod>2020-05-14</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.hypercore-protocol.org/posts/hyperspace/</loc>
+    <lastmod>2020-09-17</lastmod>
   </url>
 </urlset>
