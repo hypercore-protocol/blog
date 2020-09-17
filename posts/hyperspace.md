@@ -67,7 +67,7 @@ const drive = hyperdrive(client.corestore())
 First, install hyperspace globally with `npm i hyperspace -g`. Once installed, you'll have a `hyperspace` CLI command which can be used to start the service:
 ```
 ❯ hyperspace
-Running hyperspace/3.6.1 linux-x64 node-v12.17.0
+Running hyperspace/3.9.1
 Listening on /tmp/hyperspace.sock
 ```
 

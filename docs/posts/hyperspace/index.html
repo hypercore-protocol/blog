@@ -90,7 +90,7 @@
 <h3 id="trying-it-out">Trying it Out <a class="direct-link" href="#trying-it-out">#</a></h3>
 <p>First, install hyperspace globally with <code>npm i hyperspace -g</code>. Once installed, you'll have a <code>hyperspace</code> CLI command which can be used to start the service:</p>
 <pre><code>❯ hyperspace
-Running hyperspace/3.6.1 linux-x64 node-v12.17.0
+Running hyperspace/3.9.1
 Listening on /tmp/hyperspace.sock
 </code></pre>
 <p>Importantly, if you're an existing Hyperdrive daemon user, the Hyperspace server will read from your existing Hypercores (stored in <code>~/.hyperdrive</code>), whereas new users can find their cores in <code>~/.hyperspace</code>. This lets you run the old and the new on the same storage directory, keeping things compatible. In the future, launching Hyperspace will perform a migration, moving data from <code>~/.hyperdrive</code> to <code>~/.hyperspace</code>. Once this migration is done, your Hyperdrive daemon will no longer work (unless you manually move the data), so there's no looking back!</p>
