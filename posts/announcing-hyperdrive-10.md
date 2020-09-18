@@ -38,7 +38,7 @@ Here's an example of sparsely downloading images from a large drive:
   <video src="/video/van_gogh.mp4" autoplay="" loop="" muted="" playsinline=""></video>
 </div>
 
-Under the hood, Hyperdrive is built using two append-only log data structures called [Hypercores](https://github.com/mafintosh/hypercore), one for an efficient metadata index and one for binary file content. You can learn more about Hypercore from the [Hypercore Protocol website](https://hypercore-protocol.org). Hypercore gives us a fast and secure foundation for exchanging ordered blocks of data, but a good filesystem depends a good index.
+Under the hood, Hyperdrive is built using two append-only log data structures called [Hypercores](https://github.com/mafintosh/hypercore), one for an efficient metadata index and one for binary file content. You can learn more about Hypercore from the [Hypercore Protocol website](https://hypercore-protocol.org). Hypercore gives us a fast and secure foundation for exchanging ordered blocks of data, but a good filesystem depends on a good index.
 
 <div class="video-container">
   <video src="/video/trie.mp4" autoplay="" loop="" muted="" playsinline=""></video>
